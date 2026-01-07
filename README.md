@@ -1,5 +1,17 @@
 # Cinema 3 - (Extremely Simplified) Example of Microservices in Python
 
+> **DEMO REPOSITORY DISCLAIMER**
+>
+> This repository is a fork of [umermansoor/microservices](https://github.com/umermansoor/microservices)
+> with intentionally added synthetic data for demonstration purposes. **All sensitive data in this
+> repository is fake/synthetic**, including:
+>
+> - API keys and secrets in `.env` (e.g., Stripe keys)
+> - User PII in `database/users.json` (names, emails, addresses, payment methods)
+> - Transaction data in `database/bookings.json`
+>
+> **Do not use any credentials or data from this repository in production systems.**
+> This repo exists solely to demonstrate security scanning and compliance tooling.
 
 Overview
 ========

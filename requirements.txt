@@ -1,0 +1,8 @@
+# Core dependencies
+Flask==1.0
+requests==2.20.0
+werkzeug==0.14.1
+
+# Utilities
+python-dotenv==0.19.0
+PyYAML==5.4

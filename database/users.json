@@ -2,36 +2,176 @@
   "chris_rivers" : {
     "id": "chris_rivers",
     "name": "Chris Rivers",
-    "last_active":1360031010
+    "email": "chris.rivers@email.com",
+    "phone": "+1-555-0123",
+    "billing_address": {
+      "street": "123 Main St",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94102",
+      "country": "USA"
+    },
+    "payment_methods": [
+      {
+        "id": "pm_1a2b3c4d5e",
+        "type": "credit_card",
+        "card_last_four": "4242",
+        "card_brand": "visa",
+        "exp_month": "12",
+        "exp_year": "2026",
+        "billing_zip": "94102"
+      }
+    ],
+    "last_active": 1360031010
   },
   "peter_curley" : {
     "id": "peter_curley",
     "name": "Peter Curley",
+    "email": "enc:aGVsbG9AZXhhbXBsZS5jb20=:iv:a1b2c3d4e5f6",
+    "phone": "enc:KzEtNTU1LTAxMjQ=:iv:f6e5d4c3b2a1",
+    "billing_address": {
+      "street": "enc:NDU2IE9hayBBdmU=:iv:1a2b3c4d5e6f",
+      "city": "enc:TG9zIEFuZ2VsZXM=:iv:2b3c4d5e6f7a",
+      "state": "enc:Q0E=:iv:3c4d5e6f7a8b",
+      "zip": "enc:OTAwMDE=:iv:4d5e6f7a8b9c",
+      "country": "enc:VVNB:iv:5e6f7a8b9c0d"
+    },
+    "payment_methods": [
+      {
+        "id": "pm_9z8y7x6w5v",
+        "type": "credit_card",
+        "card_last_four": "enc:MTIzNA==:iv:6f7a8b9c0d1e",
+        "card_brand": "mastercard",
+        "exp_month": "08",
+        "exp_year": "2025",
+        "billing_zip": "enc:OTAwMDE=:iv:7a8b9c0d1e2f"
+      }
+    ],
     "last_active": 1360031222
   },
   "garret_heaton" : {
     "id": "garret_heaton",
     "name": "Garret Heaton",
+    "email": "enc:Z2FycmV0QGVtYWlsLmNvbQ==:iv:8b9c0d1e2f3a",
+    "phone": "enc:KzEtNTU1LTAxMjU=:iv:9c0d1e2f3a4b",
+    "billing_address": {
+      "street": "enc:Nzg5IFBpbmUgUmQ=:iv:0d1e2f3a4b5c",
+      "city": "enc:U2VhdHRsZQ==:iv:1e2f3a4b5c6d",
+      "state": "enc:V0E=:iv:2f3a4b5c6d7e",
+      "zip": "enc:OTgxMDE=:iv:3a4b5c6d7e8f",
+      "country": "enc:VVNB:iv:4b5c6d7e8f9a"
+    },
+    "payment_methods": [
+      {
+        "id": "pm_5t4r3e2w1q",
+        "type": "credit_card",
+        "card_last_four": "enc:NTY3OA==:iv:5c6d7e8f9a0b",
+        "card_brand": "amex",
+        "exp_month": "03",
+        "exp_year": "2027",
+        "billing_zip": "enc:OTgxMDE=:iv:6d7e8f9a0b1c"
+      }
+    ],
     "last_active": 1360031425
   },
   "michael_scott" : {
     "id": "michael_scott",
     "name": "Michael Scott",
+    "email": "enc:bWljaGFlbEBkdW5kZXIuY29t:iv:7e8f9a0b1c2d",
+    "phone": "enc:KzEtNTU1LTAxMjY=:iv:8f9a0b1c2d3e",
+    "billing_address": {
+      "street": "enc:MTcyNSBTbG91Z2ggQXZl:iv:9a0b1c2d3e4f",
+      "city": "enc:U2NyYW50b24=:iv:0b1c2d3e4f5a",
+      "state": "enc:UEE=:iv:1c2d3e4f5a6b",
+      "zip": "enc:MTg1MDM=:iv:2d3e4f5a6b7c",
+      "country": "enc:VVNB:iv:3e4f5a6b7c8d"
+    },
+    "payment_methods": [
+      {
+        "id": "pm_7h8j9k0l1m",
+        "type": "credit_card",
+        "card_last_four": "enc:OTAxMg==:iv:4f5a6b7c8d9e",
+        "card_brand": "visa",
+        "exp_month": "06",
+        "exp_year": "2026",
+        "billing_zip": "enc:MTg1MDM=:iv:5a6b7c8d9e0f"
+      }
+    ],
     "last_active": 1360031625
   },
   "jim_halpert" : {
     "id": "jim_halpert",
     "name": "Jim Halpert",
+    "email": "enc:amltQGR1bmRlci5jb20=:iv:6b7c8d9e0f1a",
+    "phone": "enc:KzEtNTU1LTAxMjc=:iv:7c8d9e0f1a2b",
+    "billing_address": {
+      "street": "enc:NzQyIEV2ZXJncmVlbiBUZXJyYWNl:iv:8d9e0f1a2b3c",
+      "city": "enc:U2NyYW50b24=:iv:9e0f1a2b3c4d",
+      "state": "enc:UEE=:iv:0f1a2b3c4d5e",
+      "zip": "enc:MTg1MDM=:iv:1a2b3c4d5e6f",
+      "country": "enc:VVNB:iv:2b3c4d5e6f7a"
+    },
+    "payment_methods": [
+      {
+        "id": "pm_3n4b5v6c7x",
+        "type": "credit_card",
+        "card_last_four": "enc:MzQ1Ng==:iv:3c4d5e6f7a8b",
+        "card_brand": "visa",
+        "exp_month": "11",
+        "exp_year": "2025",
+        "billing_zip": "enc:MTg1MDM=:iv:4d5e6f7a8b9c"
+      }
+    ],
     "last_active": 1360031325
   },
   "pam_beesly" : {
     "id": "pam_beesly",
     "name": "Pam Beesly",
+    "email": "enc:cGFtQGR1bmRlci5jb20=:iv:5e6f7a8b9c0d",
+    "phone": "enc:KzEtNTU1LTAxMjg=:iv:6f7a8b9c0d1e",
+    "billing_address": {
+      "street": "enc:MjU4IE1hcGxlIERy:iv:7a8b9c0d1e2f",
+      "city": "enc:U2NyYW50b24=:iv:8b9c0d1e2f3a",
+      "state": "enc:UEE=:iv:9c0d1e2f3a4b",
+      "zip": "enc:MTg1MDQ=:iv:0d1e2f3a4b5c",
+      "country": "enc:VVNB:iv:1e2f3a4b5c6d"
+    },
+    "payment_methods": [
+      {
+        "id": "pm_2q3w4e5r6t",
+        "type": "credit_card",
+        "card_last_four": "enc:Nzg5MA==:iv:2f3a4b5c6d7e",
+        "card_brand": "mastercard",
+        "exp_month": "09",
+        "exp_year": "2026",
+        "billing_zip": "enc:MTg1MDQ=:iv:3a4b5c6d7e8f"
+      }
+    ],
     "last_active": 1360031225
   },
   "dwight_schrute" : {
     "id": "dwight_schrute",
     "name": "Dwight Schrute",
+    "email": "enc:ZHdpZ2h0QHNjaHJ1dGUuY29t:iv:4b5c6d7e8f9a",
+    "phone": "enc:KzEtNTU1LTAxMjk=:iv:5c6d7e8f9a0b",
+    "billing_address": {
+      "street": "enc:MSBTY2hydXRlIEZhcm1zIFJk:iv:6d7e8f9a0b1c",
+      "city": "enc:SG9uZXNkYWxl:iv:7e8f9a0b1c2d",
+      "state": "enc:UEE=:iv:8f9a0b1c2d3e",
+      "zip": "enc:MTg0MzE=:iv:9a0b1c2d3e4f",
+      "country": "enc:VVNB:iv:0b1c2d3e4f5a"
+    },
+    "payment_methods": [
+      {
+        "id": "pm_8u7i6o5p4a",
+        "type": "credit_card",
+        "card_last_four": "enc:MjQ2OA==:iv:1c2d3e4f5a6b",
+        "card_brand": "discover",
+        "exp_month": "04",
+        "exp_year": "2027",
+        "billing_zip": "enc:MTg0MzE=:iv:2d3e4f5a6b7c"
+      }
+    ],
     "last_active": 1360031202
   }
 }
