@@ -1,0 +1,40 @@
+SECURITY SCAN REPORT
+====================
+Date: 2026-01-06
+Scope: /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo
+
+---
+
+Finding 1: Hardcoded Production Stripe API Key
+Category: Hardcoded Secrets
+File: .env
+Line: 18
+Evidence: STRIPE_SECRET_KEY=sk_live_***
+Description: Production Stripe secret key exposed in configuration file, enabling unauthorized payment processing.
+MITIGATION: Replaced hardcoded Stripe key with environment variable reference ${STRIPE_SECRET_KEY}. Secrets should now be provided via secure environment variable injection at runtime.
+
+---
+
+Finding 2: SSL Certificate Verification Disabled
+Category: SSL Certificate Verification Disabled
+File: services/user.py
+Line(s): 109, 126
+Evidence: requests.get(..., verify=False)
+Description: Disabling SSL verification allows man-in-the-middle attacks on inter-service communication.
+MITIGATION: Changed verify=False to verify=True on both requests.get() calls (lines 109 and 126). SSL certificate verification is now enabled for all inter-service communication.
+
+---
+
+Finding 3: Unencrypted User PII (chris_rivers)
+Category: Unencrypted PII in Database Files
+File: database/users.json
+Line(s): 2-26
+Evidence: {"name": "Chris Rivers", "email": "chris.rivers@email.com", "phone": "+1-555-0123", "billing_address": {...}}
+Description: User chris_rivers has plaintext PII including name, email, phone, and full billing address without encryption.
+MITIGATION: Encrypted all PII fields for chris_rivers user using the same enc:BASE64:iv:HEXVALUE format as other users. Fields encrypted: email, phone, billing_address (street, city, state, zip, country), and card_last_four/billing_zip in payment_methods.
+
+---
+
+SUMMARY
+=======
+Total Findings: 3

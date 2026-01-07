@@ -106,7 +106,7 @@ def user_bookings(username):
 
     # Fetch bookings from booking service
     try:
-        users_bookings = requests.get("http://127.0.0.1:5003/bookings/{}".format(username), verify=False)
+        users_bookings = requests.get("http://127.0.0.1:5003/bookings/{}".format(username), verify=True)
     except requests.exceptions.ConnectionError:
         raise ServiceUnavailable("The Bookings service is unavailable.")
 
@@ -123,7 +123,7 @@ def user_bookings(username):
             movieid = booking.get('movie_id')
             # Fetch movie details
             try:
-                movies_resp = requests.get("http://127.0.0.1:5001/movies/{}".format(movieid), verify=False)
+                movies_resp = requests.get("http://127.0.0.1:5001/movies/{}".format(movieid), verify=True)
             except requests.exceptions.ConnectionError:
                 raise ServiceUnavailable("The Movie service is unavailable.")
             movies_resp = movies_resp.json()

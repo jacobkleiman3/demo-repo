@@ -2,24 +2,24 @@
   "chris_rivers" : {
     "id": "chris_rivers",
     "name": "Chris Rivers",
-    "email": "chris.rivers@email.com",
-    "phone": "+1-555-0123",
+    "email": "enc:Y2hyaXMucml2ZXJzQGVtYWlsLmNvbQ==:iv:a0b1c2d3e4f5",
+    "phone": "enc:KzEtNTU1LTAxMjM=:iv:b1c2d3e4f5a6",
     "billing_address": {
-      "street": "123 Main St",
-      "city": "San Francisco",
-      "state": "CA",
-      "zip": "94102",
-      "country": "USA"
+      "street": "enc:MTIzIE1haW4gU3Q=:iv:c2d3e4f5a6b7",
+      "city": "enc:U2FuIEZyYW5jaXNjbw==:iv:d3e4f5a6b7c8",
+      "state": "enc:Q0E=:iv:e4f5a6b7c8d9",
+      "zip": "enc:OTQxMDI=:iv:f5a6b7c8d9e0",
+      "country": "enc:VVNB:iv:a6b7c8d9e0f1"
     },
     "payment_methods": [
       {
         "id": "pm_1a2b3c4d5e",
         "type": "credit_card",
-        "card_last_four": "4242",
+        "card_last_four": "enc:NDI0Mg==:iv:b7c8d9e0f1a2",
         "card_brand": "visa",
         "exp_month": "12",
         "exp_year": "2026",
-        "billing_zip": "94102"
+        "billing_zip": "enc:OTQxMDI=:iv:c8d9e0f1a2b3"
       }
     ],
     "last_active": 1360031010
