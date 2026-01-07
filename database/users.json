@@ -1,29 +1,4 @@
 {
-  "chris_rivers" : {
-    "id": "chris_rivers",
-    "name": "Chris Rivers",
-    "email": "chris.rivers@email.com",
-    "phone": "+1-555-0123",
-    "billing_address": {
-      "street": "123 Main St",
-      "city": "San Francisco",
-      "state": "CA",
-      "zip": "94102",
-      "country": "USA"
-    },
-    "payment_methods": [
-      {
-        "id": "pm_1a2b3c4d5e",
-        "type": "credit_card",
-        "card_last_four": "4242",
-        "card_brand": "visa",
-        "exp_month": "12",
-        "exp_year": "2026",
-        "billing_zip": "94102"
-      }
-    ],
-    "last_active": 1360031010
-  },
   "peter_curley" : {
     "id": "peter_curley",
     "name": "Peter Curley",
