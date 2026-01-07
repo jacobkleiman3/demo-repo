@@ -1,6 +1,7 @@
 """
 Configuration file for Cinema Booking microservices
 """
+# Test comment for PR workflow
 import os
 
 class Config:
