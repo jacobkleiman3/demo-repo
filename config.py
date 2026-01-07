@@ -2,6 +2,7 @@
 Configuration file for Cinema Booking microservices
 """
 # Test comment for PR workflow
+# Testing Claude Code GitHub Action
 import os
 
 class Config:
