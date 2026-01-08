@@ -9,14 +9,12 @@ movie listings, showtimes, and payment processing.
 - REST APIs
 - JSON for data exchange
 
-## Development Guidelines
-- Follow PEP 8 style guide for Python
-- Use meaningful variable names
-- Add docstrings to functions
-
 ## Git Workflow
 - This is a fork of umermansoor/microservices
-- Default branch: `main` (NOT master)
-- When creating PRs, ALWAYS target the `main` branch
+- Default branch: `main` (NOT master - master exists but is deprecated)
+- **CRITICAL**: When creating PRs with `gh pr create`, you MUST specify:
+  - `--repo jacobkleiman3/demo-repo` (to target this fork, not upstream)
+  - `--base main` (to target the main branch, not master)
+  - Full command: `gh pr create --repo jacobkleiman3/demo-repo --base main --head <branch-name>`
 - Always create feature branches for new work (never commit directly to main)
-- PR workflow: Create feature branch → Make changes → Push → PR to `main`
+- PR workflow: Create feature branch → Make changes → Push → PR to `main` on this fork
