@@ -1,0 +1,19 @@
+SECURITY SCAN REPORT
+====================
+Date: 2026-01-07
+Scope: /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo
+
+---
+
+Finding 1: SSL Verification Disabled
+Category: SSL Certificate Verification Disabled
+File: services/user.py
+Line(s): 110, 127
+Evidence: requests.get(url, verify=False)
+Description: Disabling SSL verification allows man-in-the-middle attacks.
+
+---
+
+SUMMARY
+=======
+Total Findings: 1
