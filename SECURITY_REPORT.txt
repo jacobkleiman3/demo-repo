@@ -1,0 +1,24 @@
+SECURITY SCAN REPORT
+====================
+Date: 2026-01-08
+Scope: /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo
+
+---
+
+Finding 1: SSL Verification Disabled
+Category: SSL Certificate Verification Disabled
+File: services/user.py
+Line(s): 109, 126
+Evidence: requests.get("http://127.0.0.1:5003/bookings/{}".format(username), verify=False)
+Description: Disabling SSL verification allows man-in-the-middle attacks on inter-service communication.
+
+---
+
+SUMMARY
+=======
+Total Findings: 1
+
+Notes:
+- Hardcoded Secrets: None found. The .env file uses environment variable references (${VAR}) which is the correct approach.
+- Unencrypted PII: None found. The database/users.json file properly encrypts sensitive fields using format "enc:base64data:iv:ivdata".
+- Database bookings.json contains transaction data without PII (no SSN, card numbers, or personal details).
