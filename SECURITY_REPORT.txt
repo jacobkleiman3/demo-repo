@@ -1,0 +1,307 @@
+================================================================================
+                    SECURITY COMPLIANCE SCAN REPORT
+                    Cinema Booking Platform - Microservices
+================================================================================
+
+Scan Date: 2026-01-08
+Scan Scope: Full repository security audit
+Repository: demo-repo (Python/Flask microservices)
+
+================================================================================
+                            EXECUTIVE SUMMARY
+================================================================================
+
+Total Findings: 7
+  - Critical: 1
+  - High: 3
+  - Medium: 2
+  - Low: 1
+
+The codebase demonstrates several good security practices (environment variables
+for secrets, encrypted PII in database, authentication decorators, audit logging),
+but has notable gaps that should be addressed before production deployment.
+
+================================================================================
+                        FINDINGS BY CATEGORY
+================================================================================
+
+==============================================================================
+CATEGORY 1: ENCRYPTION ISSUES
+==============================================================================
+
+------------------------------------------------------------------------------
+Finding #1: SSL Certificate Verification Disabled
+------------------------------------------------------------------------------
+Severity: HIGH
+File: /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/user.py
+Lines: 109, 126
+
+Description:
+SSL/TLS certificate verification is explicitly disabled when making HTTP
+requests between microservices. This allows man-in-the-middle (MITM) attacks
+where an attacker could intercept, read, or modify data in transit.
+
+Evidence:
+  Line 109: requests.get("http://127.0.0.1:5003/bookings/{}".format(username), verify=False)
+  Line 126: requests.get("http://127.0.0.1:5001/movies/{}".format(movieid), verify=False)
+
+Remediation:
+- Remove verify=False from all requests calls
+- Use HTTPS for all inter-service communication, even internal
+- Configure proper SSL certificates for all services
+- Use service mesh (e.g., Istio) for secure service-to-service communication
+
+------------------------------------------------------------------------------
+Finding #2: Unencrypted HTTP for Inter-Service Communication
+------------------------------------------------------------------------------
+Severity: HIGH
+File: /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/user.py
+Lines: 109, 126
+Also in: /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/config.py (lines 40-42)
+
+Description:
+All inter-service communication uses unencrypted HTTP (http://) instead of
+HTTPS. Even on localhost/internal networks, this exposes sensitive data to
+potential interception.
+
+Evidence:
+  config.py:40: MOVIE_SERVICE_URL = 'http://127.0.0.1:5001'
+  config.py:41: BOOKING_SERVICE_URL = 'http://127.0.0.1:5003'
+  config.py:42: USER_SERVICE_URL = 'http://127.0.0.1:5000'
+
+Remediation:
+- Migrate all service URLs to HTTPS
+- Implement TLS termination at service level or via reverse proxy
+- Consider mutual TLS (mTLS) for service-to-service authentication
+
+==============================================================================
+CATEGORY 2: DEPENDENCY VULNERABILITIES
+==============================================================================
+
+------------------------------------------------------------------------------
+Finding #3: Outdated Dependencies with Known Vulnerabilities
+------------------------------------------------------------------------------
+Severity: CRITICAL
+Files:
+  /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/requirements.txt
+  /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/setup.py
+
+Description:
+The application uses severely outdated dependencies with known security
+vulnerabilities:
+
+  - Flask==1.0 (Current: 3.x) - Multiple CVEs including session issues
+  - requests==2.20.0 (Current: 2.31+) - CVE-2023-32681 (header injection)
+  - werkzeug==0.14.1 (Current: 3.x) - Multiple CVEs including debugger RCE
+  - PyYAML==5.4 (Current: 6.x) - Arbitrary code execution vulnerabilities
+
+Evidence (requirements.txt):
+  Flask==1.0
+  requests==2.20.0
+  werkzeug==0.14.1
+  PyYAML==5.4
+
+Remediation:
+- Update all dependencies to latest stable versions
+- Implement automated dependency scanning (e.g., Dependabot, Snyk)
+- Add pip-audit or safety to CI/CD pipeline
+- Pin dependencies and review updates regularly
+
+==============================================================================
+CATEGORY 3: AUTHENTICATION/AUTHORIZATION FLAWS
+==============================================================================
+
+------------------------------------------------------------------------------
+Finding #4: Missing Authentication on Public Endpoints
+------------------------------------------------------------------------------
+Severity: MEDIUM
+Files:
+  /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/movies.py
+  /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/showtimes.py
+
+Description:
+The movies and showtimes services do not require authentication for any
+endpoints. While these may be considered "public" data, lack of authentication
+prevents rate limiting from being effective against abuse and removes the
+ability to track who accessed the data.
+
+Evidence (movies.py):
+  @app.route("/movies/<movieid>", methods=['GET'])
+  @limiter.limit("60 per minute")  # Rate limiting exists but no auth
+  def movie_info(movieid):
+
+Note: The user.py and bookings.py services correctly implement @require_auth
+
+Remediation:
+- Consider adding optional authentication for analytics/tracking
+- Implement API key requirement even for public endpoints
+- Add client identification for abuse prevention
+
+------------------------------------------------------------------------------
+Finding #5: Token Validation Not Implemented
+------------------------------------------------------------------------------
+Severity: HIGH
+File: /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/user.py
+Lines: 38-49
+Also: /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/bookings.py (lines 35-45)
+
+Description:
+The require_auth decorator only checks for the presence of a Bearer token
+header but does not validate the token against any authentication service,
+database, or JWT signature. Any request with "Bearer <anything>" will pass.
+
+Evidence:
+  def require_auth(f):
+      """Authentication decorator - validates request has valid auth token"""
+      @wraps(f)
+      def decorated(*args, **kwargs):
+          auth_header = request.headers.get('Authorization')
+          if not auth_header or not auth_header.startswith('Bearer '):
+              raise Unauthorized("Valid authentication required")
+          return f(*args, **kwargs)  # Token never actually validated!
+      return decorated
+
+Remediation:
+- Implement proper JWT validation with signature verification
+- Integrate with an identity provider (OAuth2/OIDC)
+- Add token expiration checking
+- Validate token claims (issuer, audience, etc.)
+
+==============================================================================
+CATEGORY 4: INPUT VALIDATION ISSUES
+==============================================================================
+
+------------------------------------------------------------------------------
+Finding #6: Missing Input Validation on Path Parameters
+------------------------------------------------------------------------------
+Severity: MEDIUM
+Files:
+  /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/user.py (lines 72, 95, 156)
+  /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/movies.py (line 38)
+  /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/showtimes.py (line 51)
+  /Users/jacobkleiman/Documents/Anthropic/claude-code-demos/swe_compliance-scan/demo-repo/services/bookings.py (line 76)
+
+Description:
+Path parameters (username, movieid, date) are used directly without input
+validation or sanitization. While the current JSON file-based storage is not
+vulnerable to injection, future database migrations could introduce SQL
+injection risks.
+
+Evidence:
+  @app.route("/users/<username>", methods=['GET'])
+  def user_record(username):
+      if username not in users:  # Direct dictionary lookup, no validation
+          raise NotFound
+
+Remediation:
+- Add input validation decorators for all path parameters
+- Implement regex patterns in route definitions
+- Sanitize inputs before any database operations
+- Add length limits and character whitelisting
+
+==============================================================================
+CATEGORY 5: AUDIT LOGGING GAPS
+==============================================================================
+
+------------------------------------------------------------------------------
+Finding #7: Incomplete Audit Logging Coverage
+------------------------------------------------------------------------------
+Severity: LOW
+Files: Multiple service files
+
+Description:
+While the codebase has implemented structured audit logging (which is good),
+several security-relevant events are not logged:
+
+  1. Failed authentication attempts (no logging in require_auth)
+  2. Root endpoint access (hello() routes have no logging)
+  3. Rate limit violations
+  4. Error conditions (only success cases are logged)
+
+Evidence (user.py require_auth):
+  def require_auth(f):
+      @wraps(f)
+      def decorated(*args, **kwargs):
+          auth_header = request.headers.get('Authorization')
+          if not auth_header or not auth_header.startswith('Bearer '):
+              # NO LOGGING of failed auth attempt here!
+              raise Unauthorized("Valid authentication required")
+          return f(*args, **kwargs)
+      return decorated
+
+Remediation:
+- Log all authentication failures with source IP
+- Log rate limit violations
+- Add logging for all error conditions
+- Ensure logs include timestamp, source IP, user agent, and request ID
+- Consider centralized logging (ELK stack, CloudWatch, etc.)
+
+================================================================================
+                        POSITIVE SECURITY FINDINGS
+================================================================================
+
+The scan also identified several good security practices in the codebase:
+
+1. SECRETS MANAGEMENT (GOOD)
+   - All API keys and secrets are loaded from environment variables
+   - No hardcoded credentials found in source code
+   - .env file is in .gitignore
+
+2. ENCRYPTED PII IN DATABASE (GOOD)
+   - User PII in database/users.json is encrypted with format:
+     "enc:<base64_data>:iv:<initialization_vector>"
+   - Sensitive fields (email, phone, address, card numbers) are protected
+
+3. SESSION SECURITY (GOOD)
+   - SESSION_COOKIE_HTTPONLY = True
+   - SESSION_COOKIE_SECURE = True (in production config)
+   - SESSION_COOKIE_SAMESITE = 'Lax'
+
+4. RATE LIMITING (GOOD)
+   - Flask-Limiter implemented on movies and showtimes services
+   - Default limit of 100 requests per minute
+
+5. DEBUG MODE DISABLED (GOOD)
+   - All services have debug=False in production run statements
+
+6. STRUCTURED LOGGING (GOOD)
+   - Consistent audit log format across services
+   - Action, resource, and result fields standardized
+
+================================================================================
+                        REMEDIATION PRIORITY
+================================================================================
+
+Priority 1 (Immediate - within 1 week):
+  - Finding #3: Update vulnerable dependencies
+  - Finding #5: Implement proper token validation
+  - Finding #1: Enable SSL certificate verification
+
+Priority 2 (Short-term - within 1 month):
+  - Finding #2: Migrate to HTTPS for all services
+  - Finding #6: Add input validation
+
+Priority 3 (Medium-term - within quarter):
+  - Finding #4: Add authentication to public endpoints
+  - Finding #7: Complete audit logging coverage
+
+================================================================================
+                        COMPLIANCE CONSIDERATIONS
+================================================================================
+
+PCI-DSS:
+  - Card data (last four digits) is properly encrypted in storage
+  - However, inter-service HTTP communication may violate Requirement 4.1
+
+GDPR:
+  - PII encryption in database is compliant
+  - Audit logging supports accountability requirements
+  - Data retention policy defined (365 days in config.py)
+
+SOC 2:
+  - Audit logging partially supports monitoring controls
+  - Authentication needs strengthening for access control requirements
+
+================================================================================
+                            END OF REPORT
+================================================================================
